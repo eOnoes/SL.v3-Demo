@@ -1,0 +1,2180 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Shift Log v3 - UX Demo (Mobile)</title>
+    <link rel="stylesheet" href="resources/css/mp.css">
+    <link rel="stylesheet" href="resources/css/ml.css">
+</head>
+<body>
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         TITLEBAR
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="titlebar">
+        <h1>Shift Log (UX Demo)</h1>
+        <button class="export-btn" id="exportBtn" title="Export PDF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         LEFT-EDGE MENU TAB (REPLACES HAMBURGER)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <button class="menu-tab" id="menuTab">&#9776;</button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         SEARCH BAR (MP MODE - WITH WELDING GLASS MODE)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search entries...">
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ML HEADER SEARCH (ML MODE ONLY - CENTER OF TITLEBAR)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="ml-header-search" id="mlHeaderSearch">
+        <input type="text" id="mlSearchInput" placeholder="Search entries...">
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         SEARCH MODE â€” WELDING GLASS OVERLAY
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="search-overlay" id="searchOverlay"></div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         SEARCH OVERLAY INPUT (ACTIVE INPUT WHEN OVERLAY IS OPEN)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="search-overlay-input-container" id="searchOverlayInputContainer">
+        <input type="text" id="searchOverlayInput" placeholder="Search entries...">
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         SEARCH FILTERS (BELOW SEARCH BAR)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="search-filters" id="searchFilters">
+        <button class="filter-btn" data-filter="crew">Crew</button>
+        <button class="filter-btn" data-filter="event">Event</button>
+        <button class="filter-btn" data-filter="safety">Safety</button>
+        <button class="filter-btn" data-filter="status">Status</button>
+        <button class="filter-btn" data-filter="notes">Notes</button>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         SEARCH RESULTS (SCROLLABLE, INSIDE OVERLAY)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="search-results" id="searchResults"></div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         SEARCH CLOSE BUTTON (TOP-RIGHT X, 44Ã—44px TAP TARGET)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <button class="search-close" id="searchClose">&times;</button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         RHF FURNACE MAP PLACEHOLDER (TWO-LAYER SYSTEM)
+         Layer 1 (z-index:10): Slots (bars & empty slots)
+         Layer 2 (z-index:20): Labels (gap numbers ONLY)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="rhf-map" id="rhfMap">
+        <div class="rhf-slots-layer">
+            <div class="rhf-slots" id="rhfSlots"></div>
+        </div>
+        <div class="rhf-labels-layer" id="rhfLabels"></div>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ML MODE: SEARCH BUTTON (TOP-RIGHT, LEFT OF RHF, GUARANTEED VISIBLE)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <button class="ml-search-button" id="mlSearchButton">Search</button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ML MODE: RHF TOGGLE BUTTON (TOP-RIGHT, LANDSCAPE ONLY)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <button class="rhf-toggle" id="rhfToggle">RHF</button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ML MODE: RHF CLOSE BUTTON (X, TOP-RIGHT OF PANEL)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <button class="rhf-close" id="rhfClose">&times;</button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ML MODE: RHF OVERLAY BACKDROP (TAP OUTSIDE TO CLOSE)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="rhf-overlay" id="rhfOverlay"></div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         FEED AREA
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="feed" id="feed"></div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         GLASS VIEWER OVERLAY (FEED CARD DETAIL VIEW)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div class="glass-viewer-backdrop" id="glassViewerBackdrop"></div>
+    <div class="glass-viewer" id="glassViewer">
+        <div class="glass-viewer-content">
+            <!-- Header -->
+            <div class="glass-viewer-header">
+                <div class="glass-viewer-title" id="glassViewerTitle">Entry Title</div>
+                <div class="glass-viewer-meta">
+                    <span class="glass-viewer-timestamp" id="glassViewerTimestamp">2:45 PM</span>
+                    <span class="glass-viewer-category" id="glassViewerCategory">Flash Report</span>
+                    <span class="glass-viewer-status" id="glassViewerStatus">Active</span>
+                </div>
+            </div>
+
+            <!-- Body (scrollable) -->
+            <div class="glass-viewer-body" id="glassViewerBody">
+                <!-- Description -->
+                <div class="glass-viewer-section">
+                    <label>Description</label>
+                    <div class="glass-viewer-description" id="glassViewerDescription">
+                        Entry description will appear here.
+                    </div>
+                </div>
+
+                <!-- Edit Mode Fields (hidden by default) -->
+                <div class="glass-viewer-edit-fields hidden" id="glassViewerEditFields">
+                    <div class="glass-viewer-field">
+                        <label for="glassEditTitle">Title</label>
+                        <input type="text" id="glassEditTitle" placeholder="Title">
+                    </div>
+                    <div class="glass-viewer-field">
+                        <label for="glassEditDescription">Description</label>
+                        <textarea id="glassEditDescription" placeholder="Description" rows="6"></textarea>
+                    </div>
+                    <div class="glass-viewer-field">
+                        <label for="glassEditStatus">Status</label>
+                        <select id="glassEditStatus">
+                            <option value="active">Active</option>
+                            <option value="resolved">Resolved</option>
+                            <option value="archived">Archived</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- History Section -->
+                <div class="glass-viewer-section">
+                    <label>Revision History</label>
+                    <div class="glass-viewer-history" id="glassViewerHistory">
+                        <!-- History items will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer (sticky) -->
+            <div class="glass-viewer-footer">
+                <button class="glass-btn glass-btn-secondary" id="glassViewerClose">CLOSE</button>
+                <button class="glass-btn glass-btn-primary" id="glassViewerEdit">EDIT</button>
+                <button class="glass-btn glass-btn-primary hidden" id="glassViewerSave">SAVE</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         EXPORT TEST MODAL (PDF EXPORT DEMO)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div class="export-modal-backdrop" id="exportModalBackdrop"></div>
+    <div class="export-modal" id="exportModal">
+        <div class="export-modal-content">
+            <div class="export-modal-header">
+                <h2>Shift Log Export Preview</h2>
+                <button class="export-modal-close" id="exportModalClose">&times;</button>
+            </div>
+            <div class="export-modal-body">
+                <div class="pdf-preview-container">
+                    <div class="pdf-page">
+                        <!-- PDF Header -->
+                        <div class="pdf-header">
+                            <h1 class="pdf-title">Shift Log Report</h1>
+                            <div class="pdf-shift-info" id="pdfShiftInfo">
+                                A Crew • January 15, 2025 • Day Shift
+                            </div>
+                            <div class="pdf-mill-side" id="pdfMillSide">
+                                Mill Side: <strong>Rolling</strong>
+                            </div>
+                            <div class="pdf-generated">
+                                Generated: <span id="pdfGeneratedTime"></span>
+                            </div>
+                        </div>
+
+                        <!-- Section 1: Safety Summary (MANDATORY FIRST) -->
+                        <div class="pdf-section">
+                            <h2 class="pdf-section-title">Safety Summary</h2>
+                            <div class="pdf-safety-grid" id="pdfSafetySummary">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Shift Metrics -->
+                        <div class="pdf-section">
+                            <h2 class="pdf-section-title">Shift Metrics</h2>
+                            <div class="pdf-metrics-grid">
+                                <div class="pdf-metric">
+                                    <span class="pdf-metric-label">Total Down Time:</span>
+                                    <span class="pdf-metric-value">45 minutes</span>
+                                </div>
+                                <div class="pdf-metric">
+                                    <span class="pdf-metric-label">Total Tons Rolled:</span>
+                                    <span class="pdf-metric-value">1,247 tons</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Shift Entries -->
+                        <div class="pdf-section">
+                            <h2 class="pdf-section-title">Shift Entries (Newest → Oldest)</h2>
+                            <div class="pdf-entries" id="pdfEntries">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="export-modal-footer">
+                <button class="export-btn-secondary" id="exportCancel">Close Preview</button>
+                <button class="export-btn-primary" id="exportGenerate">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         FLOATING ACTION BUTTON (FAB)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <button class="fab" id="fabBtn">+</button>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         LEFT MENU
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="menu-panel" id="menuPanel">
+        <div class="menu-header">
+            <h2>Menu</h2>
+        </div>
+        <button class="menu-item">Best Practices</button>
+        <button class="menu-item">Notes</button>
+        <button class="menu-item">Export</button>
+        <button class="menu-item">Version / About</button>
+
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             POWER / GAS TRACKER (PLACEHOLDER VALUES ONLY)
+             â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+        <div class="menu-tracker">
+            <div class="menu-tracker-title">Power / Gas</div>
+
+            <!-- POWER DEMAND PANEL -->
+            <div class="tracker-panel">
+                <div class="tracker-panel-header">Power Demand</div>
+                <div class="tracker-row">
+                    <div class="tracker-label">5 Min</div>
+                    <div class="tracker-value">142.3 MW</div>
+                </div>
+                <div class="tracker-row">
+                    <div class="tracker-label">30 Min</div>
+                    <div class="tracker-value">138.7 MW</div>
+                </div>
+            </div>
+
+            <!-- GAS PANEL -->
+            <div class="tracker-panel">
+                <div class="tracker-panel-header">Projected NG Dth</div>
+                <div class="tracker-row">
+                    <div class="tracker-label">Current Day</div>
+                    <div class="tracker-value">1,247</div>
+                </div>
+                <div class="tracker-row">
+                    <div class="tracker-label">Yesterday</div>
+                    <div class="tracker-value">1,189</div>
+                </div>
+                <div class="tracker-row">
+                    <div class="tracker-label">RHF</div>
+                    <div class="tracker-value">823</div>
+                </div>
+                <div class="tracker-row">
+                    <div class="tracker-label">Heat Treat</div>
+                    <div class="tracker-value">424</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ADD PANEL
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="add-overlay" id="addOverlay"></div>
+    <div class="add-panel" id="addPanel">
+        <h2>Add Entry</h2>
+        <button class="add-option safety" data-type="safety">Safety</button>
+        <button class="add-option event" data-type="event">Event</button>
+        <button class="add-option notes" data-type="notes">Notes</button>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ENTRY FORM
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="entry-overlay" id="entryOverlay"></div>
+    <div class="entry-form" id="entryForm">
+        <!-- MP: Title at top -->
+        <h2 id="entryFormTitle">New Entry</h2>
+
+        <!-- ML: Left column (type selectors) -->
+        <div class="entry-left-column">
+            <div class="form-field hidden" id="safetyTypeField">
+                <label>Safety Type</label>
+                <div class="button-group">
+                    <button class="type-btn" data-value="flash">Flash Report</button>
+                    <button class="type-btn" data-value="grow">GROW</button>
+                    <button class="type-btn" data-value="hazelim">HazElim</button>
+                </div>
+            </div>
+
+            <div class="form-field hidden" id="eventStatusField">
+                <label>Event Status</label>
+                <div class="button-group">
+                    <button class="type-btn" data-value="ongoing">Ongoing</button>
+                    <button class="type-btn" data-value="workaround">Workaround</button>
+                    <button class="type-btn" data-value="resolved">Resolved</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ML: Right column (title + description) -->
+        <div class="entry-right-column">
+            <div class="form-field">
+                <label for="entryTitle">Title</label>
+                <input type="text" id="entryTitle" placeholder="Title">
+            </div>
+
+            <div class="form-field">
+                <label for="entryDesc">Description</label>
+                <textarea id="entryDesc" placeholder="Description"></textarea>
+            </div>
+        </div>
+
+        <!-- Form actions (Cancel/Save) -->
+        <div class="form-actions">
+            <button class="btn btn-cancel" id="btnCancel">Cancel</button>
+            <button class="btn btn-save" id="btnSave" disabled>Save</button>
+        </div>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         ML ENTRY DRAWER (RIGHT SLIDE-IN, LANDSCAPE ONLY)
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="ml-entry-backdrop" id="mlEntryBackdrop"></div>
+    <div class="ml-entry-drawer" id="mlEntryDrawer">
+        <div class="ml-entry-drawer-header">
+            <h2 id="mlEntryDrawerTitle">New Entry</h2>
+        </div>
+
+        <div class="ml-entry-drawer-body">
+            <!-- Safety Type Section -->
+            <div class="ml-section hidden" id="mlSafetySection">
+                <label>Safety Type</label>
+                <div class="ml-button-group">
+                    <button class="ml-type-btn" data-value="flash">Flash Report</button>
+                    <button class="ml-type-btn" data-value="grow">GROW</button>
+                    <button class="ml-type-btn" data-value="hazelim">HazElim</button>
+                </div>
+            </div>
+
+            <!-- Event Status Section -->
+            <div class="ml-section hidden" id="mlEventSection">
+                <label>Event Status</label>
+                <div class="ml-button-group">
+                    <button class="ml-type-btn" data-value="ongoing">Ongoing</button>
+                    <button class="ml-type-btn" data-value="workaround">Workaround</button>
+                    <button class="ml-type-btn" data-value="resolved">Resolved</button>
+                </div>
+            </div>
+
+            <!-- Title Input -->
+            <div class="ml-form-field">
+                <label for="mlEntryTitle">Title</label>
+                <input type="text" id="mlEntryTitle" placeholder="Title">
+            </div>
+
+            <!-- Description Textarea -->
+            <div class="ml-form-field">
+                <label for="mlEntryDesc">Description</label>
+                <textarea id="mlEntryDesc" placeholder="Description" rows="8"></textarea>
+            </div>
+        </div>
+
+        <div class="ml-entry-drawer-footer">
+            <div class="ml-footer-buttons">
+                <button class="btn btn-cancel" id="mlBtnCancel">Cancel</button>
+                <button class="btn btn-save" id="mlBtnSave" disabled>Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         JAVASCRIPT
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <script>
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // INITIALIZATION
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('  Shift Log v3 - UX PLACEHOLDER DEMO (Mobile First)');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        console.log('  No Ext JS used: âœ…');
+        console.log('  No network calls: âœ…');
+        console.log('  Offline-safe UX placeholder: âœ…');
+        console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // DOM REFERENCES (DECLARED ONCE AT TOP, INITIALIZED ON DOM READY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        let rhfMap = null;
+        let rhfToggle = null;
+        let rhfOverlay = null;
+        let rhfClose = null;
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // DEBUG MODE (SET TO FALSE BEFORE PRODUCTION)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const DEBUG_UI = true;
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // STATE MANAGEMENT FLAGS (EXPLICIT STATE TRACKING)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        let isRHFInitialized = false;
+        let isMenuOpen = false;
+        let isSearchOpen = false;
+        let isAddEntryOpen = false;
+        let isEntryFormOpen = false;
+        let isRHFPanelOpen = false; // ML mode only
+        let isMLDrawerOpen = false; // ML drawer state
+        let isHomeVisible = true;
+        let currentMode = 'MP'; // Track current mode for debug logging
+        let currentEntryType = null; // Track current entry type (safety/event/notes)
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ML MODE DETECTION (MOBILE LANDSCAPE)
+        // Activates ONLY when: coarse pointer AND width > height
+        // Returns mode string: 'MP' or 'ML' (NO DOM USAGE)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function detectMode() {
+            const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isML = isCoarsePointer && isLandscape;
+            return isML ? 'ML' : 'MP';
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // MODE-AWARE HELPER: Check if currently in ML mode
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function isMLMode() {
+            return currentMode === 'ML';
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // HARD CLOSE MENU AT DOM LEVEL (FORCE RESET)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function hardCloseMenuDOM() {
+            const menu = document.getElementById('menuPanel');
+            const backdrop = document.getElementById('menuOverlay');
+
+            if (menu) {
+                menu.classList.remove('open', 'active', 'visible');
+                menu.style.display = '';
+                menu.style.transform = '';
+                menu.style.left = '';
+                menu.style.right = '';
+                menu.style.opacity = '';
+                menu.style.pointerEvents = '';
+                menu.setAttribute('aria-hidden', 'true');
+            }
+
+            if (backdrop) {
+                backdrop.classList.remove('open', 'active', 'visible');
+                backdrop.style.display = '';
+                backdrop.style.opacity = '';
+                backdrop.style.pointerEvents = '';
+                backdrop.setAttribute('aria-hidden', 'true');
+            }
+
+            if (DEBUG_UI) {
+                console.log('ðŸ”§ hardCloseMenuDOM executed', {
+                    menuClasses: menu ? menu.className : 'N/A',
+                    backdropClasses: backdrop ? backdrop.className : 'N/A'
+                });
+            }
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // CLOSE ALL OVERLAYS (CALLED ON MODE CHANGE)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function closeAllOverlays(options = {}) {
+            const reason = options.reason || 'manual';
+
+            if (DEBUG_UI) {
+                console.log('ðŸ”’ closeAllOverlays called', { reason, currentMode, isMenuOpen, isSearchOpen, isAddEntryOpen, isEntryFormOpen, isRHFPanelOpen });
+            }
+
+            // Close menu
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuPanel = document.getElementById('menuPanel');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            if (menuPanel) menuPanel.classList.remove('active');
+            isMenuOpen = false;
+
+            // Close search
+            const searchBar = document.querySelector('.search-bar');
+            const searchOverlay = document.getElementById('searchOverlay');
+            const searchFilters = document.getElementById('searchFilters');
+            const searchResults = document.getElementById('searchResults');
+            const searchClose = document.getElementById('searchClose');
+            const searchInput = document.getElementById('searchInput');
+            if (searchBar) searchBar.classList.remove('active');
+            if (searchOverlay) searchOverlay.classList.remove('active');
+            if (searchFilters) searchFilters.classList.remove('active');
+            if (searchResults) searchResults.classList.remove('active');
+            if (searchClose) searchClose.classList.remove('active');
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.blur();
+            }
+            isSearchOpen = false;
+
+            // Close add entry popover
+            const addOverlay = document.getElementById('addOverlay');
+            const addPanel = document.getElementById('addPanel');
+            if (addOverlay) addOverlay.classList.remove('active');
+            if (addPanel) addPanel.classList.remove('active');
+            isAddEntryOpen = false;
+
+            // Close entry form
+            const entryOverlay = document.getElementById('entryOverlay');
+            const entryForm = document.getElementById('entryForm');
+            if (entryOverlay) entryOverlay.classList.remove('active');
+            if (entryForm) entryForm.classList.remove('active');
+            isEntryFormOpen = false;
+
+            // Close RHF panel (ML mode)
+            if (rhfMap) rhfMap.classList.remove('ml-visible');
+            if (rhfToggle) rhfToggle.classList.remove('active');
+            if (rhfOverlay) rhfOverlay.classList.remove('active');
+            if (rhfClose) rhfClose.classList.remove('active');
+            isRHFPanelOpen = false;
+
+            // Close ML drawer
+            const mlDrawer = document.getElementById('mlEntryDrawer');
+            const mlBackdrop = document.getElementById('mlEntryBackdrop');
+            if (mlDrawer) mlDrawer.classList.remove('open');
+            if (mlBackdrop) mlBackdrop.classList.remove('open');
+            isMLDrawerOpen = false;
+
+            // Reset home visibility
+            isHomeVisible = true;
+            showRHFLabels();
+
+            if (reason === 'modeChange') {
+                console.log('ðŸ”’ All overlays closed due to mode change');
+            }
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ML DRAWER FUNCTIONS (LANDSCAPE ONLY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+        // Open ML drawer for specific entry type
+        function openMLDrawer(type) {
+            const mlDrawer = document.getElementById('mlEntryDrawer');
+            const mlBackdrop = document.getElementById('mlEntryBackdrop');
+            const mlTitle = document.getElementById('mlEntryDrawerTitle');
+            const mlSafetySection = document.getElementById('mlSafetySection');
+            const mlEventSection = document.getElementById('mlEventSection');
+            const mlTitleInput = document.getElementById('mlEntryTitle');
+            const mlDescInput = document.getElementById('mlEntryDesc');
+            const mlSaveBtn = document.getElementById('mlBtnSave');
+
+            // Reset form
+            if (mlTitleInput) mlTitleInput.value = '';
+            if (mlDescInput) mlDescInput.value = '';
+            if (mlSaveBtn) mlSaveBtn.disabled = true;
+
+            // Clear type button selections
+            document.querySelectorAll('.ml-type-btn').forEach(btn => btn.classList.remove('selected'));
+
+            // Set title and show appropriate section
+            currentEntryType = type;
+            if (type === 'safety') {
+                if (mlTitle) mlTitle.textContent = 'New Safety Entry';
+                if (mlSafetySection) mlSafetySection.classList.remove('hidden');
+                if (mlEventSection) mlEventSection.classList.add('hidden');
+            } else if (type === 'event') {
+                if (mlTitle) mlTitle.textContent = 'New Event Entry';
+                if (mlSafetySection) mlSafetySection.classList.add('hidden');
+                if (mlEventSection) mlEventSection.classList.remove('hidden');
+            } else if (type === 'notes') {
+                if (mlTitle) mlTitle.textContent = 'New Note';
+                if (mlSafetySection) mlSafetySection.classList.add('hidden');
+                if (mlEventSection) mlEventSection.classList.add('hidden');
+            }
+
+            // Open drawer
+            if (mlBackdrop) mlBackdrop.classList.add('open');
+            if (mlDrawer) mlDrawer.classList.add('open');
+            isMLDrawerOpen = true;
+
+            if (DEBUG_UI) {
+                console.log(`[ML DRAWER] Opened ${type} drawer`);
+            }
+        }
+
+        // Close ML drawer
+        function closeMLDrawer() {
+            const mlDrawer = document.getElementById('mlEntryDrawer');
+            const mlBackdrop = document.getElementById('mlEntryBackdrop');
+
+            if (mlDrawer) mlDrawer.classList.remove('open');
+            if (mlBackdrop) mlBackdrop.classList.remove('open');
+            isMLDrawerOpen = false;
+            currentEntryType = null;
+
+            if (DEBUG_UI) {
+                console.log('[ML DRAWER] Closed');
+            }
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // MODE-AWARE ENTRY ROUTING
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+        // Open entry form (mode-aware routing)
+        function openEntry(type) {
+            if (isMLMode()) {
+                // ML mode: open drawer
+                openMLDrawer(type);
+            } else {
+                // MP mode: use existing modal logic
+                openMPModal(type);
+            }
+        }
+
+        // Open MP modal (existing logic, extracted for clarity)
+        function openMPModal(type) {
+            const entryOverlay = document.getElementById('entryOverlay');
+            const entryForm = document.getElementById('entryForm');
+            const entryFormTitle = document.getElementById('entryFormTitle');
+            const safetyTypeField = document.getElementById('safetyTypeField');
+            const eventStatusField = document.getElementById('eventStatusField');
+            const entryTitle = document.getElementById('entryTitle');
+            const entryDesc = document.getElementById('entryDesc');
+            const saveBtn = document.getElementById('btnSave');
+
+            // Reset form
+            if (entryTitle) entryTitle.value = '';
+            if (entryDesc) entryDesc.value = '';
+            if (saveBtn) saveBtn.disabled = true;
+
+            // Clear type button selections
+            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('selected'));
+
+            // Set title and show appropriate fields
+            currentEntryType = type;
+            if (type === 'safety') {
+                if (entryFormTitle) entryFormTitle.textContent = 'New Safety Entry';
+                if (safetyTypeField) safetyTypeField.classList.remove('hidden');
+                if (eventStatusField) eventStatusField.classList.add('hidden');
+            } else if (type === 'event') {
+                if (entryFormTitle) entryFormTitle.textContent = 'New Event Entry';
+                if (safetyTypeField) safetyTypeField.classList.add('hidden');
+                if (eventStatusField) eventStatusField.classList.remove('hidden');
+            } else if (type === 'notes') {
+                if (entryFormTitle) entryFormTitle.textContent = 'New Note';
+                if (safetyTypeField) safetyTypeField.classList.add('hidden');
+                if (eventStatusField) eventStatusField.classList.add('hidden');
+            }
+
+            // Open modal
+            if (entryOverlay) entryOverlay.classList.add('active');
+            if (entryForm) entryForm.classList.add('active');
+            isEntryFormOpen = true;
+
+            if (DEBUG_UI) {
+                console.log(`[MP MODAL] Opened ${type} modal`);
+            }
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // APPLY MODE (TOUCHES DOM + RHF VISIBILITY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function applyMode(mode) {
+            currentMode = mode; // Update global mode tracker
+
+            if (mode === 'ML') {
+                document.body.classList.add('ml-mode');
+                if (DEBUG_UI) {
+                    console.log('ðŸ“± ML MODE ACTIVE (Mobile Landscape)');
+                }
+
+                // ML MODE VALIDATION ASSERTIONS (REQUIRED)
+                console.log("[ML] header search exists:", !!document.querySelector(".ml-header-search"));
+                const mlHeaderSearchRect = document.querySelector(".ml-header-search")?.getBoundingClientRect();
+                console.log("[ML] header search rect:", mlHeaderSearchRect);
+                if (mlHeaderSearchRect && mlHeaderSearchRect.width < 50) {
+                    console.warn("[ML] WARNING: Header search width too small:", mlHeaderSearchRect.width, "px");
+                }
+
+                const mlSearchButtonRect = document.querySelector(".ml-search-button")?.getBoundingClientRect();
+                console.log("[ML] search button rect:", mlSearchButtonRect);
+                if (mlSearchButtonRect && mlSearchButtonRect.width < 50) {
+                    console.warn("[ML] WARNING: Search button width too small:", mlSearchButtonRect.width, "px");
+                }
+
+                console.log("searchOverlay parent:", document.querySelector("#searchOverlay")?.parentElement?.tagName);
+            } else {
+                document.body.classList.remove('ml-mode');
+                if (DEBUG_UI) {
+                    console.log('ðŸ“± MP MODE ACTIVE (Mobile Portrait)');
+                }
+            }
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // HANDLE RESIZE (RECALCULATE MODE + RHF FONT SIZES)
+        // Debounced to prevent excessive re-renders
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        let resizeTimeout;
+        let lastMode = null;
+        function handleResize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const mode = detectMode();
+
+                // If mode changed, close all overlays FIRST (BEFORE applyMode)
+                if (lastMode !== null && lastMode !== mode) {
+                    if (DEBUG_UI) {
+                        console.log('ðŸ”„ MODE CHANGE DETECTED', { from: lastMode, to: mode });
+                    }
+
+                    // STEP 1: Close all overlays + hard reset menu BEFORE mode change
+                    closeAllOverlays({ reason: 'modeChange' });
+                    hardCloseMenuDOM();
+                }
+                lastMode = mode;
+
+                // STEP 2: Apply new mode (adds/removes ml-mode class)
+                applyMode(mode);
+
+                // STEP 3: Close all overlays + hard reset menu AFTER mode change (in next frame)
+                if (lastMode !== mode) {
+                    requestAnimationFrame(() => {
+                        closeAllOverlays({ reason: 'modeChange' });
+                        hardCloseMenuDOM();
+                    });
+                }
+
+                // Re-initialize RHF to recalculate dynamic font sizes
+                // (font size = barWidthPx * 2.5, where barWidthPx = RHF_inner_width / 48)
+                if (typeof initRHF === 'function') {
+                    initRHF();
+                }
+            }, 150); // 150ms debounce
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // RHF FURNACE MAP (SLOT MATH â€” RIGHTMOST DIGIT ANCHORED)
+        // - Exactly 48 fixed slots
+        // - Each bar occupies exactly 1 slot
+        // - Slot math is authoritative (NO pixel-based gap logic)
+        // - Bars move RIGHT â†’ LEFT
+        // - Gap detection: gapSlots = next.slotIndex - prev.slotIndex - 1
+        // - Display label ONLY if gapSlots >= 2
+        // - Gap label spans FIRST TWO EMPTY SLOTS (label window)
+        // - RIGHTMOST DIGIT centered in 2-slot window
+        // - Gap label font size = barWidthPx * 2 (or max 1.8 if clipping)
+        // - Line-height = font-size
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+        // DEMO DATA: Bar positions (slotIndex)
+        // In production, this would come from real data
+        const rhfBars = [
+            { slotIndex: 5 },
+            { slotIndex: 6 },
+            { slotIndex: 7 },
+            { slotIndex: 10 }, // Gap of 2 before this (slots 8-9 empty)
+            { slotIndex: 11 },
+            { slotIndex: 15 }, // Gap of 3 before this (slots 12-14 empty)
+            { slotIndex: 16 },
+            { slotIndex: 17 },
+            { slotIndex: 20 }, // Gap of 2 before this (slots 18-19 empty)
+            { slotIndex: 21 },
+            { slotIndex: 22 }
+        ];
+
+        function initRHF() {
+            const rhfSlots = document.getElementById('rhfSlots');
+            const rhfLabels = document.getElementById('rhfLabels');
+            const totalSlots = 48;
+
+            // Clear existing content (both layers)
+            rhfSlots.innerHTML = '';
+            rhfLabels.innerHTML = '';
+
+            // CALCULATE DYNAMIC FONT SIZE (LOCKED RULE + INCREASED ~2 STEPS)
+            // barWidthPx = RHF_inner_width / 48
+            // fontSize = barWidthPx * 2.5 (increased from 2.0 for better visibility)
+            const rhfInnerWidth = rhfSlots.offsetWidth;
+            const barWidthPx = rhfInnerWidth / totalSlots;
+            const gapLabelFontSize = barWidthPx * 2.5; // Increased ~2 steps from 2.0
+            const gapLabelLineHeight = gapLabelFontSize; // line-height = font-size
+
+            // Check for empty furnace
+            if (rhfBars.length === 0) {
+                // Show "EMPTY" label in labels layer (centered, all caps)
+                const label = document.createElement('div');
+                label.className = 'rhf-gap-label';
+                label.textContent = 'EMPTY';
+                label.style.fontSize = gapLabelFontSize + 'px';
+                label.style.lineHeight = gapLabelLineHeight + 'px';
+                label.style.left = '0';
+                label.style.width = '100%';
+                label.style.textAlign = 'center';
+                rhfLabels.appendChild(label);
+
+                // Fill slots layer with empty slots
+                for (let i = 0; i < totalSlots; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'rhf-slot';
+                    div.style.background = '#0a0a0a';
+                    rhfSlots.appendChild(div);
+                }
+                return;
+            }
+
+            // Sort bars by slotIndex (left â†’ right)
+            const sortedBars = [...rhfBars].sort((a, b) => a.slotIndex - b.slotIndex);
+
+            // Detect gaps and identify FIRST EMPTY SLOT of each gap (label window start)
+            const gapLabels = {}; // Map: slotIndex â†’ gapSize
+            for (let i = 0; i < sortedBars.length - 1; i++) {
+                const currentBar = sortedBars[i];
+                const nextBar = sortedBars[i + 1];
+                const gapSlots = nextBar.slotIndex - currentBar.slotIndex - 1;
+
+                if (gapSlots >= 2) {
+                    // Label window = FIRST TWO EMPTY SLOTS
+                    // startSlot = currentBar.slotIndex + 1
+                    // Label spans: startSlot and (startSlot + 1)
+                    // Rightmost digit centered in this 2-slot window
+                    const firstEmptySlot = currentBar.slotIndex + 1;
+                    gapLabels[firstEmptySlot] = gapSlots;
+                }
+            }
+
+            // Build slot array
+            const slots = [];
+            for (let i = 0; i < totalSlots; i++) {
+                const hasBar = sortedBars.some(bar => bar.slotIndex === i);
+
+                if (hasBar) {
+                    // Determine zone color based on position (LEFT â†’ RIGHT)
+                    // Left 1/3 (slots 0-15): ORANGE
+                    // Middle 1/3 (slots 16-31): YELLOW/GOLD
+                    // Right 1/3 (slots 32-47): GREY
+                    let color;
+                    if (i < 16) {
+                        color = '#ff9800'; // ORANGE (LEFT)
+                    } else if (i < 32) {
+                        color = '#ffc107'; // YELLOW/GOLD (MIDDLE)
+                    } else {
+                        color = '#757575'; // GREY (RIGHT)
+                    }
+
+                    slots.push({
+                        type: 'heat',
+                        color: color
+                    });
+                } else {
+                    // Empty slot â€” check if it has a gap label
+                    const gapSize = gapLabels[i];
+                    slots.push({
+                        type: 'empty',
+                        gapLabel: gapSize ? gapSize.toString() : null
+                    });
+                }
+            }
+
+            // Render slots (bars & empty slots in slots layer)
+            slots.forEach((slot, index) => {
+                const div = document.createElement('div');
+                div.className = 'rhf-slot';
+
+                if (slot.type === 'heat') {
+                    // Heat bar
+                    div.style.background = slot.color;
+                } else {
+                    // Empty slot
+                    div.style.background = '#0a0a0a';
+                }
+
+                rhfSlots.appendChild(div);
+
+                // Render gap label in labels layer (if present)
+                if (slot.gapLabel) {
+                    const label = document.createElement('div');
+                    label.className = 'rhf-gap-label';
+                    label.textContent = slot.gapLabel;
+
+                    // POSITIONING: Anchor rightmost digit at center of first two empty slots
+                    // Two-slot center X = (startSlot + 1) * barWidth
+                    // startSlot = index (current slot is first empty slot)
+                    const twoSlotCenterX = (index + 1) * barWidthPx;
+                    const labelWidth = barWidthPx * 2; // Span two slots
+
+                    // Position label box so its CENTER aligns with two-slot center
+                    label.style.left = (twoSlotCenterX - labelWidth / 2) + 'px';
+                    label.style.width = labelWidth + 'px';
+
+                    // Apply dynamic font size (LOCKED RULE + INCREASED)
+                    label.style.fontSize = gapLabelFontSize + 'px';
+                    label.style.lineHeight = gapLabelLineHeight + 'px';
+
+                    rhfLabels.appendChild(label);
+                }
+            });
+
+            // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+            // RIGHT EDGE TRAILING GAP (SPECIAL CASE)
+            // If there are NO bars on the right side (large trailing empty region),
+            // show a gap count centered in the entire trailing empty region
+            // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+            const rightmostBarIndex = Math.max(...sortedBars.map(b => b.slotIndex));
+            const trailingGapSlots = (totalSlots - 1) - rightmostBarIndex;
+
+            if (trailingGapSlots >= 2) {
+                const label = document.createElement('div');
+                label.className = 'rhf-gap-label';
+                label.textContent = trailingGapSlots;
+
+                // SPECIAL CASE: Center in entire trailing empty region
+                // Trailing region spans from (rightmostBarIndex + 1) to (totalSlots - 1)
+                const trailingStartSlot = rightmostBarIndex + 1;
+                const trailingEndSlot = totalSlots - 1;
+                const trailingMidpoint = (trailingStartSlot + trailingEndSlot) / 2;
+                const labelCenterX = (trailingMidpoint + 0.5) * barWidthPx; // +0.5 to center in slot
+                const labelWidth = barWidthPx * 2;
+
+                label.style.left = (labelCenterX - labelWidth / 2) + 'px';
+                label.style.width = labelWidth + 'px';
+                label.style.fontSize = gapLabelFontSize + 'px';
+                label.style.lineHeight = gapLabelLineHeight + 'px';
+
+                rhfLabels.appendChild(label);
+            }
+        }
+
+
+        // ═══════════════════════════════════════════════════════════════
+        // EVENT STORE WITH REVISION HISTORY (APPEND-ONLY MODEL)
+        // ═══════════════════════════════════════════════════════════════
+
+        // In-memory event store (revision-based data model)
+        const eventStore = [
+            {
+                id: 'evt-001',
+                type: 'safety',
+                category: 'flash-report',
+                revisions: [
+                    {
+                        timestamp: '2:45 PM',
+                        editor: 'J. Smith',
+                        title: 'Near miss at Station 3',
+                        description: 'Operator almost slipped on wet floor near cooling zone. Immediate cleanup performed.',
+                        status: 'active'
+                    }
+                ]
+            },
+            {
+                id: 'evt-002',
+                type: 'event',
+                category: 'ongoing',
+                revisions: [
+                    {
+                        timestamp: '1:30 PM',
+                        editor: 'M. Johnson',
+                        title: 'Furnace 2 temperature variance',
+                        description: 'Zone 4 running 15°F below target. Monitoring closely, no product impact yet.',
+                        status: 'active'
+                    }
+                ]
+            },
+            {
+                id: 'evt-003',
+                type: 'notes',
+                category: 'notes',
+                revisions: [
+                    {
+                        timestamp: '12:00 PM',
+                        editor: 'A. Davis',
+                        title: 'Shift handoff notes',
+                        description: 'Crew B taking over at 3 PM. All systems nominal. Maintenance scheduled for tomorrow.',
+                        status: 'active'
+                    }
+                ]
+            },
+            {
+                id: 'evt-004',
+                type: 'safety',
+                category: 'grow',
+                revisions: [
+                    {
+                        timestamp: '11:15 AM',
+                        editor: 'R. Lee',
+                        title: 'PPE compliance observation',
+                        description: 'All crew members wearing proper heat-resistant gloves during furnace inspection.',
+                        status: 'active'
+                    }
+                ]
+            },
+            {
+                id: 'evt-005',
+                type: 'event',
+                category: 'resolved',
+                revisions: [
+                    {
+                        timestamp: '10:00 AM',
+                        editor: 'T. Brown',
+                        title: 'Conveyor belt alignment',
+                        description: 'Belt was tracking left. Adjusted tension rollers, now running centered.',
+                        status: 'resolved'
+                    }
+                ]
+            },
+            {
+                id: 'evt-006',
+                type: 'notes',
+                category: 'notes',
+                revisions: [
+                    {
+                        timestamp: '9:30 AM',
+                        editor: 'K. Wilson',
+                        title: 'Production target update',
+                        description: 'Revised daily target to 480 heats due to maintenance window.',
+                        status: 'active'
+                    }
+                ]
+            },
+            {
+                id: 'evt-007',
+                type: 'safety',
+                category: 'hazelim',
+                revisions: [
+                    {
+                        timestamp: '8:45 AM',
+                        editor: 'P. Martinez',
+                        title: 'Removed tripping hazard',
+                        description: 'Loose cable near control panel secured and routed properly.',
+                        status: 'resolved'
+                    }
+                ]
+            },
+            {
+                id: 'evt-008',
+                type: 'event',
+                category: 'workaround',
+                revisions: [
+                    {
+                        timestamp: '8:00 AM',
+                        editor: 'S. Garcia',
+                        title: 'Cooling fan 3 offline',
+                        description: 'Using manual cooling protocol for affected zone until repair scheduled.',
+                        status: 'active'
+                    }
+                ]
+            }
+        ];
+
+        // Category label mapping
+        const categoryLabels = {
+            'flash-report': 'Flash Report',
+            'ongoing': 'Ongoing',
+            'notes': 'Notes',
+            'grow': 'GROW',
+            'resolved': 'Resolved',
+            'hazelim': 'HazElim',
+            'workaround': 'Workaround'
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // GLASS VIEWER FUNCTIONS
+        // ═══════════════════════════════════════════════════════════════
+
+        let currentEventId = null;
+        let isEditMode = false;
+
+        function openGlassViewer(eventId) {
+            currentEventId = eventId;
+            const event = eventStore.find(e => e.id === eventId);
+            if (!event) return;
+
+            const currentRevision = event.revisions[event.revisions.length - 1];
+
+            // Populate viewer
+            document.getElementById('glassViewerTitle').textContent = currentRevision.title;
+            document.getElementById('glassViewerTimestamp').textContent = currentRevision.timestamp;
+            document.getElementById('glassViewerCategory').textContent = categoryLabels[event.category];
+            document.getElementById('glassViewerStatus').textContent = currentRevision.status;
+            document.getElementById('glassViewerDescription').textContent = currentRevision.description;
+
+            // Render history
+            renderHistory(event);
+
+            // Show overlay
+            document.getElementById('glassViewerBackdrop').classList.add('active');
+            document.getElementById('glassViewer').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGlassViewer() {
+            document.getElementById('glassViewerBackdrop').classList.remove('active');
+            document.getElementById('glassViewer').classList.remove('active');
+            document.body.style.overflow = '';
+
+            // Exit edit mode if active
+            if (isEditMode) {
+                exitEditMode();
+            }
+
+            currentEventId = null;
+        }
+
+        function enterEditMode() {
+            isEditMode = true;
+            const event = eventStore.find(e => e.id === currentEventId);
+            if (!event) return;
+
+            const currentRevision = event.revisions[event.revisions.length - 1];
+
+            // Populate edit fields
+            document.getElementById('glassEditTitle').value = currentRevision.title;
+            document.getElementById('glassEditDescription').value = currentRevision.description;
+            document.getElementById('glassEditStatus').value = currentRevision.status;
+
+            // Show edit fields, hide description
+            document.getElementById('glassViewerDescription').parentElement.classList.add('hidden');
+            document.getElementById('glassViewerEditFields').classList.remove('hidden');
+
+            // Swap buttons
+            document.getElementById('glassViewerEdit').classList.add('hidden');
+            document.getElementById('glassViewerSave').classList.remove('hidden');
+        }
+
+        function exitEditMode() {
+            isEditMode = false;
+
+            // Hide edit fields, show description
+            document.getElementById('glassViewerDescription').parentElement.classList.remove('hidden');
+            document.getElementById('glassViewerEditFields').classList.add('hidden');
+
+            // Swap buttons
+            document.getElementById('glassViewerEdit').classList.remove('hidden');
+            document.getElementById('glassViewerSave').classList.add('hidden');
+        }
+
+        function saveRevision() {
+            const event = eventStore.find(e => e.id === currentEventId);
+            if (!event) return;
+
+            // Create new revision (append-only)
+            const newRevision = {
+                timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+                editor: 'Current User',
+                title: document.getElementById('glassEditTitle').value,
+                description: document.getElementById('glassEditDescription').value,
+                status: document.getElementById('glassEditStatus').value
+            };
+
+            // Append to revisions array
+            event.revisions.push(newRevision);
+
+            // Update viewer
+            document.getElementById('glassViewerTitle').textContent = newRevision.title;
+            document.getElementById('glassViewerTimestamp').textContent = newRevision.timestamp;
+            document.getElementById('glassViewerStatus').textContent = newRevision.status;
+            document.getElementById('glassViewerDescription').textContent = newRevision.description;
+
+            // Re-render history
+            renderHistory(event);
+
+            // Update feed card
+            const feedCard = document.querySelector(`[data-event-id="${currentEventId}"]`);
+            if (feedCard) {
+                feedCard.querySelector('.feed-card-title').textContent = newRevision.title;
+                feedCard.querySelector('.feed-card-time').textContent = newRevision.timestamp;
+                feedCard.querySelector('.feed-card-desc').textContent = newRevision.description;
+            }
+
+            // Exit edit mode
+            exitEditMode();
+        }
+
+        function renderHistory(event) {
+            const historyContainer = document.getElementById('glassViewerHistory');
+            historyContainer.innerHTML = '';
+
+            // Render revisions in reverse chronological order (newest first)
+            const reversedRevisions = [...event.revisions].reverse();
+
+            reversedRevisions.forEach((revision, index) => {
+                const isCurrent = index === 0;
+                const historyItem = document.createElement('div');
+                historyItem.className = isCurrent ? 'glass-history-item current' : 'glass-history-item';
+
+                historyItem.innerHTML = `
+                    <div class="glass-history-header">
+                        <span class="glass-history-timestamp">${revision.timestamp}</span>
+                        <span class="glass-history-editor">${revision.editor}</span>
+                    </div>
+                    <div class="glass-history-changes">
+                        <strong>${revision.title}</strong><br>
+                        ${revision.description}
+                    </div>
+                `;
+
+                historyContainer.appendChild(historyItem);
+            });
+        }
+
+
+        // ═══════════════════════════════════════════════════════════════
+        // EXPORT MODAL FUNCTIONS
+        // ═══════════════════════════════════════════════════════════════
+
+        function openExportModal() {
+            // Generate safety summary counts
+            const safetyCounts = {
+                flashReports: 0,
+                grow: 0,
+                hazElim: 0
+            };
+
+            eventStore.forEach(event => {
+                if (event.type === 'safety') {
+                    if (event.category === 'flash-report') {
+                        safetyCounts.flashReports++;
+                    } else if (event.category === 'grow') {
+                        safetyCounts.grow++;
+                    } else if (event.category === 'hazelim') {
+                        safetyCounts.hazElim++;
+                    }
+                }
+            });
+
+            // Populate generated timestamp
+            const now = new Date();
+            document.getElementById('pdfGeneratedTime').textContent = now.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            // Populate safety summary
+            const safetySummary = document.getElementById('pdfSafetySummary');
+            safetySummary.innerHTML = `
+                <div class="pdf-safety-item ${safetyCounts.flashReports === 0 ? 'zero' : ''}">
+                    <div class="pdf-safety-label">Flash Reports</div>
+                    <div class="pdf-safety-value">${safetyCounts.flashReports}</div>
+                </div>
+                <div class="pdf-safety-item ${safetyCounts.grow === 0 ? 'zero' : ''}">
+                    <div class="pdf-safety-label">GROW</div>
+                    <div class="pdf-safety-value">${safetyCounts.grow}</div>
+                </div>
+                <div class="pdf-safety-item ${safetyCounts.hazElim === 0 ? 'zero' : ''}">
+                    <div class="pdf-safety-label">Hazard Elimination</div>
+                    <div class="pdf-safety-value">${safetyCounts.hazElim}</div>
+                </div>
+            `;
+
+            // Populate entries (newest first)
+            const entriesContainer = document.getElementById('pdfEntries');
+            const sortedEvents = [...eventStore].reverse(); // Newest → Oldest
+
+            entriesContainer.innerHTML = sortedEvents.slice(0, 5).map(event => {
+                const latestRevision = event.revisions[event.revisions.length - 1];
+                const categoryClass = event.type;
+                const categoryLabel = categoryLabels[event.category] || event.category;
+
+                return `
+                    <div class="pdf-entry">
+                        <div class="pdf-entry-header">
+                            <span class="pdf-entry-category ${categoryClass}">${categoryLabel}</span>
+                            <span class="pdf-entry-time">${latestRevision.timestamp}</span>
+                        </div>
+                        <div class="pdf-entry-title">${latestRevision.title}</div>
+                        <div class="pdf-entry-description">${latestRevision.description}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add "showing X of Y" note if there are more entries
+            if (eventStore.length > 5) {
+                entriesContainer.innerHTML += `
+                    <div style="text-align: center; color: #999; font-size: 12px; padding: 12px;">
+                        Showing 5 of ${eventStore.length} entries (full PDF would include all)
+                    </div>
+                `;
+            }
+
+            // Show modal
+            document.getElementById('exportModalBackdrop').classList.add('active');
+            document.getElementById('exportModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModalBackdrop').classList.remove('active');
+            document.getElementById('exportModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function generateExportDemo() {
+            // In production, this would call ExportService.generatePDF()
+            // For demo, just show an alert
+            alert('PDF Export Demo\n\nIn production, this would generate a PDF with:\n\n' +
+                  '1. Safety Summary (Flash Reports, GROW, HazElim)\n' +
+                  '2. Shift Metrics (Downtime, Production)\n' +
+                  '3. All Entries (Newest → Oldest)\n\n' +
+                  'The PDF would open in a new tab.');
+
+            closeExportModal();
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // FEED CARDS (6-10 fake cards)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function initFeed() {
+            const feed = document.getElementById('feed');
+
+            eventStore.forEach(event => {
+                const currentRevision = event.revisions[event.revisions.length - 1];
+                const isFlashReport = event.category === 'flash-report';
+                const cardClass = isFlashReport ? 'feed-card flash-report-safety' : 'feed-card';
+
+                const div = document.createElement('div');
+                div.className = cardClass;
+                div.dataset.eventId = event.id;
+                div.innerHTML = `
+                    <div class="feed-card-header">
+                        <div class="feed-card-title">${currentRevision.title}</div>
+                        <div class="feed-card-time">${currentRevision.timestamp}</div>
+                    </div>
+                    <div class="feed-card-desc">${currentRevision.description}</div>
+                    <div class="feed-card-footer">
+                        <span class="feed-card-category ${event.category}">${categoryLabels[event.category]}</span>
+                        <span class="feed-card-type">${event.type}</span>
+                    </div>
+                `;
+
+                // Add click handler to open glass viewer
+                div.addEventListener('click', () => {
+                    openGlassViewer(event.id);
+                });
+
+                feed.appendChild(div);
+            });
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // INITIALIZE DOM REFERENCES (CALLED ON DOM READY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function initDomRefs() {
+            rhfMap = document.getElementById('rhfMap');
+            rhfToggle = document.getElementById('rhfToggle');
+            rhfOverlay = document.getElementById('rhfOverlay');
+            rhfClose = document.getElementById('rhfClose');
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // RHF LABELS VISIBILITY (HOME-ONLY)
+        // Hide labels when any overlay is active
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function hideRHFLabels() {
+            if (rhfMap) rhfMap.style.display = 'none';
+        }
+
+        function showRHFLabels() {
+            if (rhfMap) rhfMap.style.display = '';
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // EVENT HANDLERS SETUP (CALLED ON DOM READY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        function setupEventHandlers() {
+            // LEFT MENU (â˜° TAB)
+            const menuTab = document.getElementById('menuTab');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuPanel = document.getElementById('menuPanel');
+
+            menuTab.addEventListener('click', () => {
+                if (DEBUG_UI) {
+                    console.log('ðŸ” MENU TOGGLE CLICKED', { currentState: isMenuOpen, mode: currentMode });
+                }
+
+                if (isMenuOpen) {
+                    // Close menu
+                    menuOverlay.classList.remove('active');
+                    menuPanel.classList.remove('active');
+                    menuPanel.style.pointerEvents = '';
+                    menuPanel.setAttribute('aria-hidden', 'true');
+                    menuOverlay.style.pointerEvents = '';
+                    menuOverlay.setAttribute('aria-hidden', 'true');
+                    isMenuOpen = false;
+                    isHomeVisible = true;
+                    showRHFLabels();
+                } else {
+                    // Open menu
+                    menuOverlay.classList.add('active');
+                    menuPanel.classList.add('active');
+                    menuPanel.style.pointerEvents = 'auto';
+                    menuPanel.setAttribute('aria-hidden', 'false');
+                    menuOverlay.style.pointerEvents = 'auto';
+                    menuOverlay.setAttribute('aria-hidden', 'false');
+                    isMenuOpen = true;
+                    isHomeVisible = false;
+                    hideRHFLabels();
+                }
+            });
+
+            menuOverlay.addEventListener('click', () => {
+                if (DEBUG_UI) {
+                    console.log('ðŸ” MENU OVERLAY CLICKED (closing menu)');
+                }
+                menuOverlay.classList.remove('active');
+                menuPanel.classList.remove('active');
+                menuPanel.style.pointerEvents = '';
+                menuPanel.setAttribute('aria-hidden', 'true');
+                menuOverlay.style.pointerEvents = '';
+                menuOverlay.setAttribute('aria-hidden', 'true');
+                isMenuOpen = false;
+                isHomeVisible = true;
+                showRHFLabels(); // Show RHF when menu closes
+            });
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    alert('Menu item clicked: ' + item.textContent);
+                });
+            });
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ADD ENTRY POPOVER (FLOATING CARD NEAR FAB)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const fabBtn = document.getElementById('fabBtn');
+        const addOverlay = document.getElementById('addOverlay');
+        const addPanel = document.getElementById('addPanel');
+
+        function openAddEntryMenu() {
+            // Position the popover near the FAB with smart anchoring
+            positionAddEntryMenuNearFAB();
+
+            addOverlay.classList.add('active');
+            // Small delay to allow position to be set before animation
+            setTimeout(() => {
+                addPanel.classList.add('active');
+            }, 10);
+
+            isAddEntryOpen = true;
+            isHomeVisible = false;
+            hideRHFLabels();
+        }
+
+        function closeAddEntryMenu() {
+            addOverlay.classList.remove('active');
+            addPanel.classList.remove('active');
+            isAddEntryOpen = false;
+            isHomeVisible = true;
+            showRHFLabels();
+        }
+
+        function positionAddEntryMenuNearFAB() {
+            const fabRect = fabBtn.getBoundingClientRect();
+            const panelWidth = 280; // max-width from CSS
+            const panelHeight = 220; // estimated height (header + 3 buttons)
+            const margin = 12; // spacing from FAB
+
+            // Default position: above and to the left of FAB
+            let top = fabRect.top - panelHeight - margin;
+            let left = fabRect.right - panelWidth;
+
+            // Smart anchoring: adjust if clipping
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            // If panel would clip top, position below FAB instead
+            if (top < margin) {
+                top = fabRect.bottom + margin;
+            }
+
+            // If panel would clip left, align with left edge of FAB
+            if (left < margin) {
+                left = fabRect.left;
+            }
+
+            // If panel would clip right, align right edge with FAB right
+            if (left + panelWidth > viewportWidth - margin) {
+                left = fabRect.right - panelWidth;
+            }
+
+            // If panel would clip bottom, position above FAB
+            if (top + panelHeight > viewportHeight - margin) {
+                top = fabRect.top - panelHeight - margin;
+            }
+
+            // Apply position
+            addPanel.style.top = Math.max(margin, top) + 'px';
+            addPanel.style.left = Math.max(margin, left) + 'px';
+        }
+
+        fabBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openAddEntryMenu();
+        });
+
+        addOverlay.addEventListener('click', () => {
+            closeAddEntryMenu();
+        });
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ENTRY FORM
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const entryOverlay = document.getElementById('entryOverlay');
+        const entryForm = document.getElementById('entryForm');
+        const entryFormTitle = document.getElementById('entryFormTitle');
+        const entryTitle = document.getElementById('entryTitle');
+        const entryDesc = document.getElementById('entryDesc');
+        const safetyTypeField = document.getElementById('safetyTypeField');
+        const eventStatusField = document.getElementById('eventStatusField');
+        const btnCancel = document.getElementById('btnCancel');
+        const btnSave = document.getElementById('btnSave');
+
+        let selectedTypeValue = null;
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ADD ENTRY POPOVER â†’ MODE-AWARE ROUTING
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        document.querySelectorAll('.add-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const type = option.dataset.type;
+
+                // Close add entry popover
+                closeAddEntryMenu();
+
+                // Route to appropriate UI based on mode
+                openEntry(type);
+
+                // Hide RHF labels when entry form opens
+                isHomeVisible = false;
+                hideRHFLabels();
+            });
+        });
+
+        // Handle type/status button selection
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Deselect all buttons in the same group
+                const group = btn.closest('.button-group');
+                group.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+                // Select clicked button
+                btn.classList.add('selected');
+                selectedTypeValue = btn.dataset.value;
+                validateForm();
+            });
+        });
+
+        // Form validation (Save enabled when Title OR Description has content)
+        function validateForm() {
+            const hasTitle = entryTitle.value.trim().length > 0;
+            const hasDesc = entryDesc.value.trim().length > 0;
+            btnSave.disabled = !(hasTitle || hasDesc);
+        }
+
+        entryTitle.addEventListener('input', validateForm);
+        entryDesc.addEventListener('input', validateForm);
+
+        // Cancel button
+        btnCancel.addEventListener('click', () => {
+            entryOverlay.classList.remove('active');
+            entryForm.classList.remove('active');
+            isEntryFormOpen = false;
+            isHomeVisible = true;
+            showRHFLabels(); // Show RHF when entry form closes
+        });
+
+        // Save button
+        btnSave.addEventListener('click', () => {
+            alert('Entry saved (demo only)');
+            entryOverlay.classList.remove('active');
+            entryForm.classList.remove('active');
+            isEntryFormOpen = false;
+            isHomeVisible = true;
+            showRHFLabels(); // Show RHF when entry form closes
+        });
+
+        // Close form when clicking overlay
+        entryOverlay.addEventListener('click', () => {
+            entryOverlay.classList.remove('active');
+            entryForm.classList.remove('active');
+            isEntryFormOpen = false;
+            isHomeVisible = true;
+            showRHFLabels(); // Show RHF when entry form closes
+        });
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ML DRAWER EVENT HANDLERS (LANDSCAPE ONLY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const mlEntryTitle = document.getElementById('mlEntryTitle');
+        const mlEntryDesc = document.getElementById('mlEntryDesc');
+        const mlBtnCancel = document.getElementById('mlBtnCancel');
+        const mlBtnSave = document.getElementById('mlBtnSave');
+        const mlEntryBackdrop = document.getElementById('mlEntryBackdrop');
+
+        let selectedMLTypeValue = null;
+
+        // ML Type button selection (Safety Type / Event Status)
+        document.querySelectorAll('.ml-type-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Deselect all buttons in the same group
+                const group = btn.closest('.ml-button-group');
+                group.querySelectorAll('.ml-type-btn').forEach(b => b.classList.remove('selected'));
+                // Select clicked button
+                btn.classList.add('selected');
+                selectedMLTypeValue = btn.dataset.value;
+                validateMLForm();
+            });
+        });
+
+        // ML Form validation (Save enabled when Title OR Description has content)
+        function validateMLForm() {
+            if (!mlEntryTitle || !mlEntryDesc || !mlBtnSave) return;
+            const hasTitle = mlEntryTitle.value.trim().length > 0;
+            const hasDesc = mlEntryDesc.value.trim().length > 0;
+            mlBtnSave.disabled = !(hasTitle || hasDesc);
+        }
+
+        if (mlEntryTitle) mlEntryTitle.addEventListener('input', validateMLForm);
+        if (mlEntryDesc) mlEntryDesc.addEventListener('input', validateMLForm);
+
+        // ML Cancel button
+        if (mlBtnCancel) {
+            mlBtnCancel.addEventListener('click', () => {
+                closeMLDrawer();
+                isHomeVisible = true;
+                showRHFLabels();
+            });
+        }
+
+        // ML Save button
+        if (mlBtnSave) {
+            mlBtnSave.addEventListener('click', () => {
+                alert('Entry saved (demo only)');
+                closeMLDrawer();
+                isHomeVisible = true;
+                showRHFLabels();
+            });
+        }
+
+        // ML Close drawer when clicking backdrop
+        if (mlEntryBackdrop) {
+            mlEntryBackdrop.addEventListener('click', () => {
+                closeMLDrawer();
+                isHomeVisible = true;
+                showRHFLabels();
+            });
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // SEARCH MODE â€” WELDING GLASS OVERLAY + TOP-RIGHT X CLOSE BUTTON
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const searchInput = document.getElementById('searchInput');
+        const searchBar = document.querySelector('.search-bar');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const searchOverlayInput = document.getElementById('searchOverlayInput');
+        const searchOverlayInputContainer = document.getElementById('searchOverlayInputContainer');
+        const searchFilters = document.getElementById('searchFilters');
+        const searchResults = document.getElementById('searchResults');
+        const searchClose = document.getElementById('searchClose');
+
+        // 8 PLACEHOLDER RESULTS (AUTO-POPULATED FOR DEMO PROOF)
+        const placeholderResults = [
+            { type: 'safety', category: 'flash-report', categoryLabel: 'Flash Report', isFlashReport: true, title: 'Near miss at Station 3', desc: 'Operator almost slipped on wet floor near cooling zone.', time: '2:45 PM' },
+            { type: 'event', category: 'ongoing', categoryLabel: 'Ongoing', title: 'Furnace 2 temperature variance', desc: 'Zone 4 running 15Â°F below target.', time: '1:30 PM' },
+            { type: 'safety', category: 'grow', categoryLabel: 'GROW', title: 'PPE compliance observation', desc: 'All crew members wearing proper heat-resistant gloves.', time: '11:15 AM' },
+            { type: 'event', category: 'resolved', categoryLabel: 'Resolved', title: 'Conveyor belt alignment', desc: 'Belt was tracking left. Adjusted tension rollers.', time: '10:00 AM' },
+            { type: 'notes', category: 'notes', categoryLabel: 'Notes', title: 'Production target update', desc: 'Revised daily target to 480 heats due to maintenance window.', time: '9:30 AM' },
+            { type: 'safety', category: 'hazelim', categoryLabel: 'HazElim', title: 'Removed tripping hazard', desc: 'Loose cable near control panel secured and routed properly.', time: '8:45 AM' },
+            { type: 'event', category: 'workaround', categoryLabel: 'Workaround', title: 'Cooling fan 3 offline', desc: 'Using manual cooling protocol for affected zone.', time: '8:00 AM' },
+            { type: 'notes', category: 'notes', categoryLabel: 'Notes', title: 'Shift handoff notes', desc: 'Crew B taking over at 3 PM. All systems nominal.', time: '7:30 AM' }
+        ];
+
+        // Activate search mode on focus (MP mode)
+        searchInput.addEventListener('focus', () => {
+            searchBar.classList.add('active');
+            openSearchOverlay();
+        });
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ML HEADER SEARCH â€” FULLSCREEN OVERLAY TRIGGER
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const mlSearchInput = document.getElementById('mlSearchInput');
+        const mlHeaderSearch = document.getElementById('mlHeaderSearch');
+
+        if (mlSearchInput && mlHeaderSearch) {
+            // Open overlay on focus or click
+            mlSearchInput.addEventListener('focus', openSearchOverlay);
+            mlHeaderSearch.addEventListener('click', () => {
+                openSearchOverlay();
+            });
+        }
+
+        // ML SEARCH BUTTON â€” GUARANTEED VISIBLE TRIGGER
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        const mlSearchButton = document.getElementById('mlSearchButton');
+        if (mlSearchButton) {
+            mlSearchButton.addEventListener('click', () => {
+                openSearchOverlay();
+            });
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // SEARCH OVERLAY INPUT â€” REAL-TIME FILTERING
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        if (searchOverlayInput) {
+            searchOverlayInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                if (query.length > 0) {
+                    const filtered = placeholderResults.filter(r =>
+                        r.title.toLowerCase().includes(query) ||
+                        r.desc.toLowerCase().includes(query)
+                    );
+                    populateSearchResults(filtered);
+                } else {
+                    populateSearchResults(placeholderResults);
+                }
+            });
+        }
+
+        // Deactivate search mode (helper function)
+        function closeSearchMode() {
+            searchBar.classList.remove('active');
+            searchOverlay.classList.remove('active');
+            searchOverlayInputContainer.classList.remove('active');
+            searchFilters.classList.remove('active');
+            searchResults.classList.remove('active');
+            searchClose.classList.remove('active');
+
+            // Clear overlay input
+            if (searchOverlayInput) {
+                searchOverlayInput.value = '';
+                searchOverlayInput.blur();
+            }
+
+            // Re-enable underlay inputs
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.disabled = false;
+                searchInput.blur();
+            }
+            if (mlSearchInput) {
+                mlSearchInput.value = '';
+                mlSearchInput.disabled = false;
+                mlSearchInput.blur();
+            }
+
+            // Clear all filter selections
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Remove body scroll freeze
+            document.body.classList.remove('search-active');
+
+            isSearchOpen = false;
+            isHomeVisible = true;
+            showRHFLabels(); // Show RHF when search closes
+        }
+
+        // Open search overlay (shared function for MP and ML)
+        function openSearchOverlay() {
+            searchOverlay.classList.add('active');
+            searchOverlayInputContainer.classList.add('active');
+            searchFilters.classList.add('active');
+            searchResults.classList.add('active');
+            searchClose.classList.add('active');
+
+            // Freeze body scroll
+            document.body.classList.add('search-active');
+
+            // Copy current input value to overlay input
+            const currentMode = detectMode();
+            if (currentMode === 'ML' && mlSearchInput) {
+                searchOverlayInput.value = mlSearchInput.value;
+            } else if (searchInput) {
+                searchOverlayInput.value = searchInput.value;
+            }
+
+            // Focus overlay input (this is where typing happens)
+            setTimeout(() => {
+                searchOverlayInput.focus();
+            }, 50);
+
+            // Disable underlay inputs to prevent typing there
+            if (searchInput) {
+                searchInput.disabled = true;
+                searchInput.blur();
+            }
+            if (mlSearchInput) {
+                mlSearchInput.disabled = true;
+                mlSearchInput.blur();
+            }
+
+            isSearchOpen = true;
+            isHomeVisible = false;
+            hideRHFLabels();
+
+            // Auto-populate 8 placeholder results
+            populateSearchResults(placeholderResults);
+        }
+
+        // X CLOSE button closes search mode (clears text and filters)
+        searchClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeSearchMode();
+        });
+
+        // Close search mode when clicking overlay
+        searchOverlay.addEventListener('click', () => {
+            closeSearchMode();
+        });
+
+        // Filter button toggle (GREY when selected, does NOT close search)
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                btn.classList.toggle('selected');
+                // Search mode stays open
+            });
+        });
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ML MODE: RHF TOGGLE BUTTON (LANDSCAPE ONLY)
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // (rhfMap, rhfToggle, rhfOverlay, rhfClose already declared above)
+
+        // Helper function to close RHF panel
+        function closeRHFPanel() {
+            rhfMap.classList.remove('ml-visible');
+            rhfToggle.classList.remove('active');
+            rhfOverlay.classList.remove('active');
+            rhfClose.classList.remove('active');
+        }
+
+        // Toggle RHF visibility in ML mode
+        rhfToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isVisible = rhfMap.classList.contains('ml-visible');
+
+            if (isVisible) {
+                // Hide RHF
+                closeRHFPanel();
+            } else {
+                // Show RHF
+                rhfMap.classList.add('ml-visible');
+                rhfToggle.classList.add('active');
+                rhfOverlay.classList.add('active');
+                rhfClose.classList.add('active');
+
+                // CRITICAL: Re-render RHF with gap labels after overlay is visible
+                // Use DOUBLE requestAnimationFrame to prevent "0 width" measurement race
+                // (Ensures slide-down animation completes and DOM is fully laid out)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        initRHF();
+                    });
+                });
+            }
+        });
+
+        // Close RHF when clicking X button
+        rhfClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeRHFPanel();
+        });
+
+        // Close RHF when tapping overlay backdrop (bottom half)
+        rhfOverlay.addEventListener('click', () => {
+            closeRHFPanel();
+        });
+
+        // Helper function to populate search results
+        function populateSearchResults(cards) {
+            searchResults.innerHTML = '';
+            cards.forEach(card => {
+                const div = document.createElement('div');
+                const cardClass = card.isFlashReport ? 'feed-card flash-report-safety' : 'feed-card';
+                div.className = cardClass;
+                div.innerHTML = `
+                    <div class="feed-card-header">
+                        <div class="feed-card-title">${card.title}</div>
+                        <div class="feed-card-time">${card.time}</div>
+                    </div>
+                    <div class="feed-card-desc">${card.desc}</div>
+                    <div class="feed-card-footer">
+                        <span class="feed-card-category ${card.category}">${card.categoryLabel}</span>
+                        <span class="feed-card-type">${card.type}</span>
+                    </div>
+                `;
+                searchResults.appendChild(div);
+            });
+        }
+
+        // NOTE: Search input filtering now handled by searchOverlayInput event listener above
+
+        // ═══════════════════════════════════════════════════════════════
+        // GLASS VIEWER EVENT HANDLERS
+        // ═══════════════════════════════════════════════════════════════
+
+        // Close button
+        document.getElementById('glassViewerClose').addEventListener('click', () => {
+            closeGlassViewer();
+        });
+
+        // Edit button
+        document.getElementById('glassViewerEdit').addEventListener('click', () => {
+            enterEditMode();
+        });
+
+        // Save button
+        document.getElementById('glassViewerSave').addEventListener('click', () => {
+            saveRevision();
+        });
+
+        // Backdrop click to close
+        document.getElementById('glassViewerBackdrop').addEventListener('click', () => {
+            closeGlassViewer();
+        });
+
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && currentEventId !== null) {
+                closeGlassViewer();
+            }
+        });
+
+        // ═══════════════════════════════════════════════════════════════
+        // EXPORT MODAL EVENT HANDLERS
+        // ═══════════════════════════════════════════════════════════════
+
+        // Export button (titlebar)
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            openExportModal();
+        });
+
+        // Export modal close button
+        document.getElementById('exportModalClose').addEventListener('click', () => {
+            closeExportModal();
+        });
+
+        // Export modal cancel button
+        document.getElementById('exportCancel').addEventListener('click', () => {
+            closeExportModal();
+        });
+
+        // Export modal generate button
+        document.getElementById('exportGenerate').addEventListener('click', () => {
+            generateExportDemo();
+        });
+
+        // Export modal backdrop click
+        document.getElementById('exportModalBackdrop').addEventListener('click', () => {
+            closeExportModal();
+        });
+
+        // ESC key to close export modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const exportModal = document.getElementById('exportModal');
+                if (exportModal.classList.contains('active')) {
+                    closeExportModal();
+                }
+            }
+        });
+
+        } // END setupEventHandlers()
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ML-SPECIFIC LAYOUT INITIALIZATION
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+        // Create ML menu shell wrapper (2-panel layout: left menu + right power/gas)
+        function initMLMenuShell() {
+            const menuPanel = document.getElementById('menuPanel');
+
+            // Create shell wrapper
+            const mlMenuShell = document.createElement('div');
+            mlMenuShell.className = 'ml-menu-shell';
+
+            // Create left panel (menu items)
+            const mlMenuLeft = document.createElement('div');
+            mlMenuLeft.className = 'ml-menu-left';
+
+            // Create right panel (power/gas)
+            const mlMenuRight = document.createElement('div');
+            mlMenuRight.className = 'ml-menu-right';
+
+            // Move menu header and menu items to left panel
+            const menuHeader = menuPanel.querySelector('.menu-header');
+            const menuItems = menuPanel.querySelectorAll('.menu-item');
+
+            if (menuHeader) mlMenuLeft.appendChild(menuHeader);
+            menuItems.forEach(item => mlMenuLeft.appendChild(item));
+
+            // Move power/gas tracker to right panel
+            const menuTracker = menuPanel.querySelector('.menu-tracker');
+            if (menuTracker) mlMenuRight.appendChild(menuTracker);
+
+            // Assemble shell
+            mlMenuShell.appendChild(mlMenuLeft);
+            mlMenuShell.appendChild(mlMenuRight);
+
+            // Insert shell into menu panel
+            menuPanel.appendChild(mlMenuShell);
+
+            if (DEBUG_UI) {
+                console.log('[ML MENU SHELL] Created 2-panel layout wrapper');
+            }
+        }
+
+        // Create ML entry form shell wrapper (body + pinned footer)
+        function initMLEntryFormShell() {
+            const entryForm = document.getElementById('entryForm');
+
+            // Create modal wrapper
+            const entryModal = document.createElement('div');
+            entryModal.className = 'entry-modal';
+
+            // Create body region (scrollable)
+            const entryBody = document.createElement('div');
+            entryBody.className = 'entry-body';
+
+            // Create left column wrapper
+            const entryColLeft = document.createElement('div');
+            entryColLeft.className = 'entry-col-left';
+
+            // Create right column wrapper
+            const entryColRight = document.createElement('div');
+            entryColRight.className = 'entry-col-right';
+
+            // Move h2 and existing left column content to entry-col-left
+            const h2 = entryForm.querySelector('h2');
+            const leftColumn = entryForm.querySelector('.entry-left-column');
+
+            if (h2) entryColLeft.appendChild(h2);
+            if (leftColumn) entryColLeft.appendChild(leftColumn);
+
+            // Move existing right column content to entry-col-right
+            const rightColumn = entryForm.querySelector('.entry-right-column');
+
+            if (rightColumn) entryColRight.appendChild(rightColumn);
+
+            // Assemble body (left + right columns)
+            entryBody.appendChild(entryColLeft);
+            entryBody.appendChild(entryColRight);
+
+            // Create footer wrapper
+            const entryFooter = document.createElement('div');
+            entryFooter.className = 'entry-footer';
+
+            // Move form-actions to footer
+            const formActions = entryForm.querySelector('.form-actions');
+            if (formActions) entryFooter.appendChild(formActions);
+
+            // Assemble modal (body + footer)
+            entryModal.appendChild(entryBody);
+            entryModal.appendChild(entryFooter);
+
+            // Insert modal into entry form
+            entryForm.appendChild(entryModal);
+
+            if (DEBUG_UI) {
+                console.log('[ML ENTRY SHELL] Created modal with entry-col-left + entry-col-right + pinned footer');
+            }
+        }
+
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // INITIALIZE ON LOAD (SINGLE INIT PIPELINE)
+        // 1) initDomRefs() - Initialize all DOM references
+        // 2) initMLMenuShell() - Create ML menu wrapper (2-panel)
+        // 3) initMLEntryFormShell() - Create ML entry form wrapper (body + footer)
+        // 4) detectMode() - Detect MP/ML/DT (NO DOM usage)
+        // 5) applyMode(mode) - Apply mode to DOM + RHF visibility
+        // 6) initRHF() - Render RHF map
+        // 7) initFeed() - Render feed cards
+        // 8) setupEventHandlers() - Set up all event listeners
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1) Initialize DOM references
+            initDomRefs();
+
+            // 2) Create ML menu shell wrapper
+            initMLMenuShell();
+
+            // 3) Create ML entry form shell wrapper
+            initMLEntryFormShell();
+
+            // 4) Detect mode (returns 'MP' or 'ML')
+            const mode = detectMode();
+
+            // 5) Apply mode to DOM
+            applyMode(mode);
+
+            // 6) Initialize RHF
+            initRHF();
+
+            // 7) Initialize feed
+            initFeed();
+
+            // 8) Set up all event handlers
+            setupEventHandlers();
+
+            // 9) Set up resize/orientation handlers
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('orientationchange', handleResize);
+
+            // 10) DEBUG: Tap logger to detect what's intercepting clicks
+            if (DEBUG_UI) {
+                document.addEventListener('pointerdown', (e) => {
+                    const topElement = document.elementFromPoint(e.clientX, e.clientY);
+                    console.log('[ðŸ‘† TAP]', {
+                        target: e.target.tagName + (e.target.id ? '#' + e.target.id : '') + (e.target.className ? '.' + e.target.className.split(' ')[0] : ''),
+                        topElement: topElement ? topElement.tagName + (topElement.id ? '#' + topElement.id : '') + (topElement.className ? '.' + topElement.className.split(' ')[0] : '') : 'N/A',
+                        mode: currentMode,
+                        isMenuOpen,
+                        coords: { x: e.clientX, y: e.clientY }
+                    });
+                });
+            }
+
+            console.log('âœ… UX Demo initialized successfully');
+        });
+    </script>
+</body>
+</html>
+
